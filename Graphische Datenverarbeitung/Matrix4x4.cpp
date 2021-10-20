@@ -3,41 +3,39 @@
 #include <iostream>
 
 Matrix4x4::Matrix4x4()
+    :m_values{0}
 {
-    int m_values_length = 4;
-    for (int row = 0; row < m_values_length; row++)
-    {
-        for (int col = 0; col < m_values_length; col++)
-        {
-            m_values[row][col] = 0;
-        }
-    }
 }
 
-Matrix4x4::Matrix4x4(float v11, float v12, float v13, float v14, 
-                    float v21, float v22, float v23, float v24, 
-                    float v31, float v32, float v33, float v34, 
-                    float v41, float v42, float v43, float v44)
+Matrix4x4::Matrix4x4(float _V00, float _V01, float _V02, float _V03,
+                    float _V10, float _V11, float _V12, float _V13,
+                    float _V20, float _V21, float _V22, float _V23,
+                    float _V30, float _V31, float _V32, float _V33)
 {
-    m_values[0][0] = v11;
-    m_values[0][1] = v12;
-    m_values[0][2] = v13;
-    m_values[0][3] = v14;
-    m_values[1][0] = v21;
-    m_values[1][1] = v22;
-    m_values[1][2] = v23;
-    m_values[1][3] = v24;
-    m_values[2][0] = v31;
-    m_values[2][1] = v32;
-    m_values[2][2] = v33;
-    m_values[2][3] = v34;
-    m_values[3][0] = v41;
-    m_values[3][1] = v42;
-    m_values[3][2] = v43;
-    m_values[3][3] = v44;
+    m_values[0][0] = _V00;
+    m_values[0][1] = _V01;
+    m_values[0][2] = _V02;
+    m_values[0][3] = _V03;
+    m_values[1][0] = _V10;
+    m_values[1][1] = _V11;
+    m_values[1][2] = _V12;
+    m_values[1][3] = _V13;
+    m_values[2][0] = _V20;
+    m_values[2][1] = _V21;
+    m_values[2][2] = _V22;
+    m_values[2][3] = _V23;
+    m_values[3][0] = _V30;
+    m_values[3][1] = _V31;
+    m_values[3][2] = _V32;
+    m_values[3][3] = _V33;
 }
 
-Matrix4x4& Matrix4x4::Add(Matrix4x4& _matrix)
+float Matrix4x4::GetValue(int _X, int _Y)
+{
+    return m_values[_X][_Y];
+}
+
+Matrix4x4 Matrix4x4::operator + (Matrix4x4& _Other)
 {
     Matrix4x4 result;
     int m_values_length = 4;
@@ -45,25 +43,26 @@ Matrix4x4& Matrix4x4::Add(Matrix4x4& _matrix)
     {
         for (int col = 0; col < m_values_length; col++)
         {
-            result.m_values[row][col] = m_values[row][col] + _matrix.m_values[row][col];
+            result.m_values[row][col] = m_values[row][col] + _Other.m_values[row][col];
         }
     }
     return result;
 }
 
-void Matrix4x4::AddAndSet(Matrix4x4& _matrix)
+Matrix4x4& Matrix4x4::operator +=(Matrix4x4& _Other)
 {
     int m_values_length = 4;
     for (int row = 0; row < m_values_length; row++)
     {
         for (int col = 0; col < m_values_length; col++)
         {
-            m_values[row][col] = m_values[row][col] + _matrix.m_values[row][col];
+            m_values[row][col] = m_values[row][col] + _Other.m_values[row][col];
         }
     }
+    return *this;
 }
 
-Matrix4x4& Matrix4x4::Mul(Matrix4x4& _matrix)
+Matrix4x4 Matrix4x4::operator * (Matrix4x4& _matrix)
 {
     Matrix4x4 result;
     int m_values_length = 4;
@@ -77,7 +76,7 @@ Matrix4x4& Matrix4x4::Mul(Matrix4x4& _matrix)
     return result;
 }
 
-void Matrix4x4::MulAndSet(Matrix4x4& _matrix)
+Matrix4x4& Matrix4x4::operator *= (Matrix4x4& _matrix)
 {
     int m_values_length = 4;
     for (int row = 0; row < m_values_length; row++)
@@ -87,6 +86,7 @@ void Matrix4x4::MulAndSet(Matrix4x4& _matrix)
             m_values[row][col] = m_values[row][col] * _matrix.m_values[row][col];
         }
     }
+    return *this;
 }
 
 void Matrix4x4::Print() {

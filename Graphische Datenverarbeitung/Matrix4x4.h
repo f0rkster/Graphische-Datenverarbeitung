@@ -2,24 +2,25 @@
 class Matrix4x4
 {
 public:
-    float m_values[4][4];
 
     Matrix4x4();
 
-    Matrix4x4(float v11, float v12, float v13, float v14,
-        float v21, float v22, float v23, float v24,
-        float v31, float v32, float v33, float v34,
-        float v41, float v42, float v43, float v44);
+    Matrix4x4(float _V00, float _V01, float _V02, float _V03,
+        float _V10, float _V11, float _V12, float _V13,
+        float _V20, float _V21, float _V22, float _V23,
+        float _V30, float _V31, float _V32, float _V33);
 
-    Matrix4x4& Add(Matrix4x4& _matrix);
-
-    void AddAndSet(Matrix4x4& _matrix);
-
-    Matrix4x4& Mul(Matrix4x4& _matrix);
-
-    void MulAndSet(Matrix4x4& _matrix);
+    float GetValue(int _X, int _Y);
+    
+    Matrix4x4  operator +  (Matrix4x4& _Other);
+    Matrix4x4& operator += (Matrix4x4& _Other);
+    Matrix4x4  operator *  (Matrix4x4& _matrix);
+    Matrix4x4& operator *= (Matrix4x4& _matrix);
 
     void Print();
     
+private:
+    float m_values[4][4];
+
 };
 

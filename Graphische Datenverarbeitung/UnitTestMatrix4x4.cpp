@@ -20,7 +20,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                actual[row][col] = test.m_values[row][col];
+                actual[row][col] = test.GetValue(row, col);
             }
         }
 
@@ -59,7 +59,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                actual[row][col] = test.m_values[row][col];
+                actual[row][col] = test.GetValue(row, col);
             }
         }
 
@@ -93,7 +93,7 @@ void UnitTestMatrix4x4()
         string testName = "Matrix4x4AddTest";
         float expected[4][4] = { {2, 3, 4, 5}, {2, 3, 4, 5}, {2, 3, 4, 5}, {2, 3, 4, 5} };
 
-        Matrix4x4 actual = test1.Add(test2);
+        Matrix4x4 actual = test1+test2;
 
         bool hasSucceded = true;
 
@@ -101,7 +101,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                if (actual.m_values[row][col] != expected[row][col] || !hasSucceded)
+                if (actual.GetValue(row, col) != expected[row][col] || !hasSucceded)
                 {
                     hasSucceded = false;
                 }
@@ -125,7 +125,7 @@ void UnitTestMatrix4x4()
         string testName = "Matrix4x4AddAndSetTest";
         float expected[4][4] = { {2, 3, 4, 5}, {2, 3, 4, 5}, {2, 3, 4, 5}, {2, 3, 4, 5} };
 
-        test1.AddAndSet(test2);
+        test1 += test2;
         Matrix4x4 actual = test1;
 
         bool hasSucceded = true;
@@ -134,7 +134,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                if (actual.m_values[row][col] != expected[row][col] || !hasSucceded)
+                if (actual.GetValue(row, col) != expected[row][col] || !hasSucceded)
                 {
                     hasSucceded = false;
                 }
@@ -158,7 +158,7 @@ void UnitTestMatrix4x4()
         string testName = "Matrix4x4MulTest";
         float expected[4][4] = { {2, 4, 6, 8}, {2, 4, 6, 8}, {2, 4, 6, 8}, {2, 4, 6, 8} };
 
-        Matrix4x4 actual = test1.Mul(test2);
+        Matrix4x4 actual = test1 * test2;
 
         bool hasSucceded = true;
 
@@ -166,7 +166,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                if (actual.m_values[row][col] != expected[row][col] || !hasSucceded)
+                if (actual.GetValue(row, col) != expected[row][col] || !hasSucceded)
                 {
                     hasSucceded = false;
                 }
@@ -190,7 +190,7 @@ void UnitTestMatrix4x4()
         string testName = "Matrix4x4MulAndSetTest";
         float expected[4][4] = { {2, 4, 6, 8}, {2, 4, 6, 8}, {2, 4, 6, 8}, {2, 4, 6, 8} };
         
-        test1.MulAndSet(test2);
+        test1 *= test2;
         Matrix4x4 actual = test1;
 
         bool hasSucceded = true;
@@ -199,7 +199,7 @@ void UnitTestMatrix4x4()
         {
             for (int col = 0; col < 4; col++)
             {
-                if (actual.m_values[row][col] != expected[row][col] || !hasSucceded)
+                if (actual.GetValue(row, col) != expected[row][col] || !hasSucceded)
                 {
                     hasSucceded = false;
                 }

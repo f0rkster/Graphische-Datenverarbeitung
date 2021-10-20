@@ -3,134 +3,133 @@
 #include "Float4.h"
 
 
-Float4::Float4() {
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        m_values[i]=0;
-    }
+Float4::Float4()
+    :m_values {0}
+{
 }
 
-Float4::Float4(float _value1, float _value2, float _value3, float _value4)
+Float4::Float4(float _V0, float _V1, float _V2, float _V3)
+    :m_values {_V0, _V1, _V2, _V3}
 {
-    m_values[0] = _value1;
-    m_values[1] = _value2;
-    m_values[2] = _value3;
-    m_values[3] = _value4;
 }
 
 //Float4(const Float4& other){ /*m_values = other.m_values; */}
 
-float Float4::Get(int _index) { return m_values[_index]; }
+float& Float4::operator [](int _Index)
+{
+    return m_values[_Index];
+}
 
-Float4& Float4::Add(Float4& _vector)
+Float4  Float4::operator +  (Float4& _Other) const
 {
     Float4 result;
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        result.m_values[i] = m_values[i] + _vector.m_values[i];
-    }
+
+    result[0] = m_values[0] + _Other[0];
+    result[1] = m_values[1] + _Other[1];
+    result[2] = m_values[2] + _Other[2];
+    result[3] = m_values[3] + _Other[3];
+
     return result;
 }
 
-void Float4::AddAndSet(Float4& _vector) {
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        m_values[i] = m_values[i] + _vector.m_values[i];
-    }
+Float4& Float4::operator += (Float4& _Other)
+{
+    m_values[0] += _Other[0];
+    m_values[1] += _Other[1];
+    m_values[2] += _Other[2];
+    m_values[3] += _Other[3];
+    return *this;
 }
 
-Float4& Float4::Sub(Float4& _vector)
+Float4  Float4::operator -  (Float4& _Other) const
 {
     Float4 result;
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        result.m_values[i] = m_values[i] - _vector.m_values[i];
-    }
+
+    result[0] = m_values[0] - _Other[0];
+    result[1] = m_values[1] - _Other[1];
+    result[2] = m_values[2] - _Other[2];
+    result[3] = m_values[3] - _Other[3];
+
     return result;
 }
 
-void Float4::SubAndSet(Float4& _vector) {
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        m_values[i] = m_values[i] - _vector.m_values[i];
-    }
+Float4& Float4::operator -= (Float4& _Other)
+{
+    m_values[0] -= _Other[0];
+    m_values[1] -= _Other[1];
+    m_values[2] -= _Other[2];
+    m_values[3] -= _Other[3];
+    return *this;
 }
 
-Float4& Float4::Mul(Float4& _vector)
+Float4  Float4::operator *  (float _Other) const
 {
     Float4 result;
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        result.m_values[i] = m_values[i] * _vector.m_values[i];
-    }
+
+    result[0] = m_values[0] * _Other;
+    result[1] = m_values[1] * _Other;
+    result[2] = m_values[2] * _Other;
+    result[3] = m_values[3] * _Other;
+
     return result;
 }
 
-void Float4::MulAndSet(Float4& _vector) {
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        m_values[i] = m_values[i] * _vector.m_values[i];
-    }
+Float4& Float4::operator *= (float _Other)
+{
+    m_values[0] *= _Other;
+    m_values[1] *= _Other;
+    m_values[2] *= _Other;
+    m_values[3] *= _Other;
+    return *this;
 }
 
-float Float4::Dot(Float4& _vector) {
-    float result;
-    result = m_values[0] * _vector.m_values[0]
-        + m_values[1] * _vector.m_values[1] + m_values[2] * _vector.m_values[2]
-        + m_values[3] * _vector.m_values[3];
-    return result;
+
+float Float4::Dot(Float4& _Other) const {
+
+    return m_values[0] * _Other[0]
+         + m_values[1] * _Other[1]
+         + m_values[2] * _Other[2]
+         + m_values[3] * _Other[3];
 }
 
-Float4& Float4::Cross(Float4& _vector) {
+Float4 Float4::Cross(Float4& _Other) const {
     Float4 result;
-    result.m_values[0] = m_values[2] * _vector.m_values[3] - m_values[3] * _vector.m_values[2];
-    result.m_values[1] = m_values[3] * _vector.m_values[4] - m_values[4] * _vector.m_values[3];
-    result.m_values[2] = m_values[4] * _vector.m_values[1] - m_values[1] * _vector.m_values[4];
-    result.m_values[3] = m_values[1] * _vector.m_values[2] - m_values[2] * _vector.m_values[1];
+    result[0] = m_values[1] * _Other[2] - m_values[2] * _Other[1];
+    result[1] = m_values[2] * _Other[3] - m_values[3] * _Other[2];
+    result[2] = m_values[3] * _Other[0] - m_values[0] * _Other[3];
+    result[3] = m_values[0] * _Other[1] - m_values[1] * _Other[0];
     return result;
 }
 
-void Float4::CrossAndSet(Float4& _vector) {
-    m_values[0] = m_values[2] * _vector.m_values[3] - m_values[3] * _vector.m_values[2];
-    m_values[1] = m_values[3] * _vector.m_values[4] - m_values[4] * _vector.m_values[3];
-    m_values[2] = m_values[4] * _vector.m_values[1] - m_values[1] * _vector.m_values[4];
-    m_values[3] = m_values[1] * _vector.m_values[2] - m_values[2] * _vector.m_values[1];
+Float4& Float4::CrossAndSet(Float4& _Other) {
+    float t0 = m_values[1] * _Other[2] - m_values[2] * _Other[1];
+    float t1 = m_values[2] * _Other[3] - m_values[3] * _Other[2];
+    float t2 = m_values[3] * _Other[0] - m_values[0] * _Other[3];
+    float t3 = m_values[0] * _Other[1] - m_values[1] * _Other[0];
+    
+    m_values[0] = t0;
+    m_values[1] = t1;
+    m_values[2] = t2;
+    m_values[3] = t3;
+
+    return *this;
 }
 
 float Float4::GetLength() {
     float result;
     result = sqrt(m_values[0] * m_values[0]
-        + m_values[1] * m_values[1]
-        + m_values[2] * m_values[2]
-        + m_values[3] * m_values[3]);
+                + m_values[1] * m_values[1]
+                + m_values[2] * m_values[2]
+                + m_values[3] * m_values[3]);
     return result;
 }
 
-Float4& Float4::GetNormalized() {
-    float length = this->GetLength();
-    Float4 result;
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        result.m_values[i] = m_values[i] / length;
-    }
-    return result;
+Float4 Float4::GetNormalized() {
+    return *this * (1 / GetLength());
 }
 
-void Float4::Normalize() {
-    float length = this->GetLength();
-    int m_values_length = sizeof(m_values) / sizeof(*m_values);
-    for (int i = 0; i < m_values_length; i++)
-    {
-        m_values[i] = m_values[i] / length;
-    }
+Float4& Float4::Normalize() {
+    return *this *= (1 / GetLength());
 }
 
 void Float4::Print() {

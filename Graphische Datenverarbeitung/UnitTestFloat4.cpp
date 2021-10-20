@@ -7,30 +7,9 @@ using namespace std;
 void UnitTestFloat4() {
     //Float4DefaultConstructorTest
     {
-        Float4 test;
+        Float4 actual;
         string testName = "Float4DefaultConstructorTest";
-        float expected[4] = { 0, 0, 0, 0 };
-        float* actual = test.m_values;
-
-        if (expected[0] == actual[0] &&
-            expected[1] == actual[1] &&
-            expected[2] == actual[2] &&
-            expected[3] == actual[3])
-        {
-            cout << "PASSED! " << testName << endl;
-        }
-        else
-        {
-            cout << "FAILED!!! " << testName << endl;
-        }
-    }
-
-    //Float44AttributesConstructorTest
-    {
-        Float4 test(1, 2, 3, 4);
-        string testName = "Float44AttributesConstructorTest";
-        float expected[4] = { 1, 2, 3, 4 };
-        float* actual = test.m_values;
+        Float4 expected( 0, 0, 0, 0 );
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -50,7 +29,7 @@ void UnitTestFloat4() {
         Float4 test(1, 2, 3, 4);
         string testName = "Float4GetTest";
         float expected = 4;
-        float actual = test.Get(3);
+        float actual = test[3];
 
         if (expected == actual)
         {
@@ -68,7 +47,7 @@ void UnitTestFloat4() {
         Float4 test2(1, 1, 1, 1);
         string testName = "Float4AddTest";
         float expected[4] = { 2, 3, 4, 5 };
-        float* actual = test1.Add(test2).m_values;
+        Float4 actual = test1 + test2;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -89,8 +68,8 @@ void UnitTestFloat4() {
         Float4 test2(1, 1, 1, 1);
         string testName = "Float4AddAndSetTest";
         float expected[4] = { 2, 3, 4, 5 };
-        test1.AddAndSet(test2);
-        float* actual = test1.m_values;
+        test1 += test2;
+        Float4 actual = test1;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -111,7 +90,7 @@ void UnitTestFloat4() {
         Float4 test2(1, 1, 1, 1);
         string testName = "Float4SubTest";
         float expected[4] = { 0, 1, 2, 3 };
-        float* actual = test1.Sub(test2).m_values;
+        Float4 actual = test1 - test2;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -132,8 +111,8 @@ void UnitTestFloat4() {
         Float4 test2(1, 1, 1, 1);
         string testName = "Float4SubAndSetTest";
         float expected[4] = { 0, 1, 2, 3 };
-        test1.SubAndSet(test2);
-        float* actual = test1.m_values;
+        test1 -= test2;
+        Float4 actual = test1;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -151,10 +130,10 @@ void UnitTestFloat4() {
     //Float4MulTest
     {
         Float4 test1(1, 2, 3, 4);
-        Float4 test2(2, 2, 2, 2);
+        float test2 = 2;
         string testName = "Float4MulTest";
         float expected[4] = { 2, 4, 6, 8 };
-        float* actual = test1.Mul(test2).m_values;
+        Float4 actual = test1 * test2;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -172,11 +151,11 @@ void UnitTestFloat4() {
     //Float4MulAndSetTest
     {
         Float4 test1(1, 2, 3, 4);
-        Float4 test2(2, 2, 2, 2);
+        float test2 = 2;
         string testName = "Float4MulAndSetTest";
         float expected[4] = { 2, 4, 6, 8 };
-        test1.MulAndSet(test2);
-        float* actual = test1.m_values;
+        test1 *= test2;
+        Float4 actual = test1;
 
         if (expected[0] == actual[0] &&
             expected[1] == actual[1] &&
@@ -217,17 +196,16 @@ void UnitTestFloat4() {
         Float4 expected(-2, -2, 6, -2);
         Float4 actual = test1.Cross(test2);
 
-        if (expected.m_values[0] == actual.m_values[0] &&
-            expected.m_values[1] == actual.m_values[1] &&
-            expected.m_values[2] == actual.m_values[2] &&
-            expected.m_values[3] == actual.m_values[3])
+        if (expected[0] == actual[0] &&
+            expected[1] == actual[1] &&
+            expected[2] == actual[2] &&
+            expected[3] == actual[3])
         {
             cout << "PASSED! " << testName << endl;
         }
         else
         {
             cout << "FAILED!!! " << testName << endl;
-            //actual.Print();
         }
     }
 
@@ -237,20 +215,21 @@ void UnitTestFloat4() {
         Float4 test2(2, 2, 2, 2);
         string testName = "Float4CrossAndSetTest";
         Float4 expected(-2, -2, 6, -2);
-        test1.CrossAndSet(test2);
+
+        test1 = test1.CrossAndSet(test2);
         Float4 actual = test1;
 
-        if (expected.m_values[0] == actual.m_values[0] &&
-            expected.m_values[1] == actual.m_values[1] &&
-            expected.m_values[2] == actual.m_values[2] &&
-            expected.m_values[3] == actual.m_values[3])
+        if (expected[0] == actual[0] &&
+            expected[1] == actual[1] &&
+            expected[2] == actual[2] &&
+            expected[3] == actual[3])
         {
             cout << "PASSED! " << testName << endl;
         }
         else
         {
             cout << "FAILED!!! " << testName << endl;
-            //actual.Print();
+            actual.Print();
         }
     }
 
@@ -280,10 +259,10 @@ void UnitTestFloat4() {
         Float4 expected(0, 0, 0, 1);
         Float4 actual = test1.GetNormalized();
 
-        if (expected.m_values[0] == actual.m_values[0] &&
-            expected.m_values[1] == actual.m_values[1] &&
-            expected.m_values[2] == actual.m_values[2] &&
-            expected.m_values[3] == actual.m_values[3])
+        if (expected[0] == actual[0] &&
+            expected[1] == actual[1] &&
+            expected[2] == actual[2] &&
+            expected[3] == actual[3])
         {
             cout << "PASSED! " << testName << endl;
         }
@@ -310,4 +289,5 @@ void UnitTestFloat4() {
             cout << "FAILED!!! " << testName << endl;
         }
     }
+
 }
