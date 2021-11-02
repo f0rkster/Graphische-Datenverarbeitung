@@ -15,10 +15,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="C:\Users\matth\Downloads\widget.cpp">
+    <ClCompile Include="C:\Users\matth\Downloads\main.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="C:\Users\matth\Downloads\main.cpp">
+    <ClCompile Include="C:\Users\matth\Downloads\widget.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
