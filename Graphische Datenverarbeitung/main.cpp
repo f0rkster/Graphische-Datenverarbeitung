@@ -13,7 +13,5 @@ int main()
 {
     UnitTestFloat4();
     UnitTestMatrix4x4();
-
-
     return 0;
 }
