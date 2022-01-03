@@ -148,60 +148,23 @@ namespace
 
         SetViewMatrix(ViewMatrix);
 
-        float WorldMatrix[16];
-
-        SetWorldMatrix(WorldMatrix);
-        DrawMesh(m_pTriangleMesh);
-
         return true;
     }
 
     // -----------------------------------------------------------------------------
 
-    float g_XRotation = 0.0f;
-    float g_XStep = 0.1f;
-
-    float g_YRotation = 0.0f;
-    float g_YStep = 0.1f;
-
-    float g_ZRotation = 0.0f;
-    float g_ZStep = 0.1f;
-
     bool CApplication::InternOnFrame()
     {
         float WorldMatrix[16];
-        float TranslationMatrix[16];
-        float InversTranslationMatrix[16];
-        float RotationMatrix[16];
-        float TmpMatrix[16];
 
         // -----------------------------------------------------------------------------
         // Set the position of the mesh in the world and draw it.
         // -----------------------------------------------------------------------------
-        GetTranslationMatrix(2.0f, 0.0f, 0.0f, WorldMatrix);
+        GetTranslationMatrix(0.0f, 0.0f, 0.0f, WorldMatrix);
         
-        GetTranslationMatrix(-2.0f, 0.0f, 0.0f, TranslationMatrix);
-        GetRotationXMatrix(g_XRotation, RotationMatrix);
-        GetRotationYMatrix(g_YRotation, RotationMatrix);
-        GetRotationZMatrix(g_ZRotation, RotationMatrix);
-        GetTranslationMatrix(2.0f, 0.0f, 0.0f, InversTranslationMatrix);
-        MulMatrix(TranslationMatrix, RotationMatrix, TmpMatrix);
-        MulMatrix(TmpMatrix, InversTranslationMatrix, RotationMatrix);
-
-
-        GetScaleMatrix(2, WorldMatrix);
-
-        GetScaleMatrix(0.5, 2, 1, WorldMatrix);
-
-        MulMatrix(WorldMatrix, RotationMatrix, WorldMatrix);
-
         SetWorldMatrix(WorldMatrix);
 
         DrawMesh(m_pTriangleMesh);
-
-        g_XRotation += g_XStep;
-        g_YRotation += g_YStep;
-        g_ZRotation += g_ZStep;
 
         return true;
     }
