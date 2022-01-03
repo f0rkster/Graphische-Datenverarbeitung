@@ -16,14 +16,41 @@ namespace
 
         private:
 
+            struct SPlanet
+            {
+                float   m_Translation[3];
+                float   m_TranslationDelta[3];
+                float   m_Rotation[3];
+                float   m_RotationDelta[3];
+                float   m_Radius;
+                float   m_Distance;
+                float   m_LocalMatrix[16];
+                float   m_GlobalMatrix[16];
+                BHandle m_pMesh;
+                BHandle m_pTexture;
+            };
+
+            struct SCamera
+            {
+                float   m_Eye[3];
+                float   m_EyeDelta[3];
+                float   m_At[3];
+                float   m_AtDelta[3];
+                float   m_Up[3];
+                float   m_UpDelta[3];
+                float   m_Rotation[3];
+                float   m_RotationDelta[3];
+                float   m_Distance;
+            };
+
+        private:
+
             float   m_FieldOfViewY;     // Vertical view angle of the camera
 
-            BHandle m_pEarthMesh;       // A pointer to a YoshiX mesh, which represents a sphere.
-            BHandle m_pEarthTexture;    // A pointer to a YoshiX texture, which is part of the material covering the sphere.
+            SCamera m_Camera;
 
-            BHandle m_pMoonMesh;
-            BHandle m_pMoonTexture;
-
+            SPlanet m_Earth;
+            SPlanet m_Moon;
 
         private:
 
@@ -41,15 +68,111 @@ namespace
     };
 } // namespace
 
+float g_SpeedUp = 10.0f;
+
 namespace
 {
     CApplication::CApplication()
         : m_FieldOfViewY (60.0f)    // Set the vertical view angle of the camera to 60 degrees.
-        , m_pEarthMesh   (nullptr)
-        , m_pEarthTexture(nullptr)
-        , m_pMoonMesh    (nullptr)
-        , m_pMoonTexture (nullptr)
+        , m_Camera{}
+        , m_Earth{}
+        , m_Moon{}
     {
+        // ----------------------------
+        // CAMERA
+        // ----------------------------
+        m_Camera.m_Eye[0]      = 0.0f;
+        m_Camera.m_Eye[1]      = 0.0f;
+        m_Camera.m_Eye[2]      = 0.0f;
+
+        m_Camera.m_EyeDelta[0] = 0.0f * g_SpeedUp;
+        m_Camera.m_EyeDelta[1] = 0.0f * g_SpeedUp;
+        m_Camera.m_EyeDelta[2] = 0.0f * g_SpeedUp;
+
+        m_Camera.m_At[0]       = 0.0f;
+        m_Camera.m_At[1]       = 0.0f;
+        m_Camera.m_At[2]       = 0.0f;
+
+        m_Camera.m_AtDelta[0]  = 0.0f * g_SpeedUp;
+        m_Camera.m_AtDelta[1]  = 0.0f * g_SpeedUp;
+        m_Camera.m_AtDelta[2]  = 0.0f * g_SpeedUp;
+
+        m_Camera.m_Up[0]       = 0.0f;
+        m_Camera.m_Up[1]       = 1.0f;
+        m_Camera.m_Up[2]       = 0.0f;
+
+        m_Camera.m_UpDelta[0]  = 0.0f * g_SpeedUp;
+        m_Camera.m_UpDelta[1]  = 0.0f * g_SpeedUp;
+        m_Camera.m_UpDelta[2]  = 0.0f * g_SpeedUp;
+
+        m_Camera.m_Rotation[0] = 0.0f;
+        m_Camera.m_Rotation[1] = 0.0f;
+        m_Camera.m_Rotation[2] = 0.0f;
+
+        m_Camera.m_RotationDelta[0] = 0.0f * g_SpeedUp;
+        m_Camera.m_RotationDelta[1] = 0.02f * g_SpeedUp;
+        m_Camera.m_RotationDelta[2] = 0.0f * g_SpeedUp;
+
+        m_Camera.m_Distance = 20.0f;
+
+        // ----------------------------
+        // Earth
+        // ----------------------------
+
+        m_Earth.m_Translation[0]      = 0.0f;
+        m_Earth.m_Translation[1]      = 0.0f;
+        m_Earth.m_Translation[2]      = 0.0f;
+
+        m_Earth.m_TranslationDelta[0] = 0.0f * g_SpeedUp;
+        m_Earth.m_TranslationDelta[1] = 0.0f * g_SpeedUp;
+        m_Earth.m_TranslationDelta[2] = 0.0f * g_SpeedUp;
+
+        m_Earth.m_Rotation[0]         = 0.0f;
+        m_Earth.m_Rotation[1]         = 0.0f;
+        m_Earth.m_Rotation[2]         = 0.0f;
+
+        m_Earth.m_RotationDelta[0]    = 0.0f * g_SpeedUp;
+        m_Earth.m_RotationDelta[1]    = 0.03f * g_SpeedUp;
+        m_Earth.m_RotationDelta[2]    = 0.0f * g_SpeedUp;
+
+        m_Earth.m_Radius              = 4.0f;
+        m_Earth.m_Distance            = 0.0f;
+
+        m_Earth.m_LocalMatrix[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] = 0;
+        m_Earth.m_GlobalMatrix[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] = 0.0f;
+
+        m_Earth.m_pMesh              = nullptr;
+        m_Earth.m_pTexture           = nullptr;
+
+        // ----------------------------
+        // Moon
+        // ----------------------------
+
+        m_Moon.m_Translation[0]      = 8.0f;
+        m_Moon.m_Translation[1]      = 0.0f;
+        m_Moon.m_Translation[2]      = 0.0f;
+
+        m_Moon.m_TranslationDelta[0] = 0.0f * g_SpeedUp;
+        m_Moon.m_TranslationDelta[1] = 0.0f * g_SpeedUp;
+        m_Moon.m_TranslationDelta[2] = 0.0f * g_SpeedUp;
+
+        m_Moon.m_Rotation[0]         = 0.0f;
+        m_Moon.m_Rotation[1]         = 0.0f;
+        m_Moon.m_Rotation[2]         = 0.0f;
+
+        m_Moon.m_RotationDelta[0]    = 0.0f * g_SpeedUp;
+        m_Moon.m_RotationDelta[1]    = 0.02f * g_SpeedUp;
+        m_Moon.m_RotationDelta[2]    = 0.04f * g_SpeedUp;
+
+        m_Moon.m_Radius              = 1.0f;
+        m_Moon.m_Distance            = 8.0f;
+
+        m_Moon.m_LocalMatrix[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] = 0;
+        m_Moon.m_GlobalMatrix[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15] = 0.0f;
+
+        m_Moon.m_pMesh               = nullptr;
+        m_Moon.m_pTexture            = nullptr;
+
     }
 
     // -----------------------------------------------------------------------------
@@ -66,8 +189,8 @@ namespace
         // Load an image from the given path and create a YoshiX texture representing
         // the image.
         // -----------------------------------------------------------------------------
-        CreateTexture("..\\data\\images\\earth.dds", &m_pEarthTexture);
-        CreateTexture("..\\data\\images\\moon.dds" , &m_pMoonTexture);
+        CreateTexture("..\\data\\images\\earth.dds", &m_Earth.m_pTexture);
+        CreateTexture("..\\data\\images\\moon.dds" , &m_Moon.m_pTexture);
 
         return true;
     }
@@ -79,8 +202,8 @@ namespace
         // -----------------------------------------------------------------------------
         // Important to release the texture again when the application is shut down.
         // -----------------------------------------------------------------------------
-        ReleaseTexture(m_pEarthTexture);
-        ReleaseTexture(m_pMoonTexture);
+        ReleaseTexture(m_Earth.m_pTexture);
+        ReleaseTexture(m_Moon.m_pTexture);
 
         return true;
     }
@@ -197,8 +320,8 @@ namespace
 
     bool CApplication::InternOnCreateMeshes()
     {
-        CreateSphere(&m_pEarthMesh, m_pEarthTexture, 4);
-        CreateSphere(&m_pMoonMesh , m_pMoonTexture , 1);
+        CreateSphere(&m_Earth.m_pMesh, m_Earth.m_pTexture, 4);
+        CreateSphere(&m_Moon.m_pMesh , m_Moon.m_pTexture , 1);
 
         return true;
     }
@@ -210,8 +333,8 @@ namespace
         // -----------------------------------------------------------------------------
         // Important to release the mesh again when the application is shut down.
         // -----------------------------------------------------------------------------
-        ReleaseMesh(m_pEarthMesh);
-        ReleaseMesh(m_pMoonMesh);
+        ReleaseMesh(m_Earth.m_pMesh);
+        ReleaseMesh(m_Moon.m_pMesh);
 
         return true;
     }
@@ -239,20 +362,23 @@ namespace
 
     bool CApplication::InternOnUpdate()
     {
-        float Eye[3];
-        float At [3];
-        float Up [3];
+        static const float s_Pi = 3.1415926535897932384626433832795f;
 
         float ViewMatrix[16];
 
         // -----------------------------------------------------------------------------
         // Define position and orientation of the camera in the world.
         // -----------------------------------------------------------------------------
-        Eye[0] =   0.0f; At[0] = 0.0f; Up[0] = 0.0f;
-        Eye[1] =   0.0f; At[1] = 0.0f; Up[1] = 1.0f;
-        Eye[2] = -20.0f; At[2] = 0.0f; Up[2] = 0.0f;
+        
+        // -----------------------------------------------------------------------------
+        // Rotate the camera position around the y-axis.
+        // -----------------------------------------------------------------------------
+        m_Camera.m_Eye[0] = m_Camera.m_Distance * cos(m_Camera.m_Rotation[1] * s_Pi / 180.0f);
+        m_Camera.m_Eye[2] = m_Camera.m_Distance * sin(m_Camera.m_Rotation[1] * s_Pi / 180.0f);
 
-        GetViewMatrix(Eye, At, Up, ViewMatrix);
+        m_Camera.m_Rotation[1] = fmodf(m_Camera.m_Rotation[1] + m_Camera.m_RotationDelta[1], 360.0f);
+
+        GetViewMatrix(&m_Camera.m_Eye[0], &m_Camera.m_At[0], &m_Camera.m_Up[0], ViewMatrix);
 
         SetViewMatrix(ViewMatrix);
 
@@ -264,22 +390,50 @@ namespace
     bool CApplication::InternOnFrame()
     {
         float WorldMatrix[16];
+        float RotationMatrix[16];
+        float TranslationMatrix[16];
+        float InverseTranslationMatrix[16];
+        float TmpMatrix[16];
 
         // -----------------------------------------------------------------------------
         // Set the position of the mesh in the world and draw it.
         // -----------------------------------------------------------------------------
-        GetTranslationMatrix(0.0f, 0.0f, 0.0f, WorldMatrix);
 
+        // Rotation Earth
+        GetTranslationMatrix(
+            m_Earth.m_Translation[0], 
+            m_Earth.m_Translation[1],
+            m_Earth.m_Translation[2],
+            TranslationMatrix
+        );
+        GetRotationYMatrix(m_Earth.m_Rotation[1], RotationMatrix);
+        MulMatrix(TranslationMatrix, RotationMatrix, WorldMatrix);
+        // Render Earth
         SetWorldMatrix(WorldMatrix);
+        DrawMesh(m_Earth.m_pMesh);
 
-        DrawMesh(m_pEarthMesh);
-
-        GetTranslationMatrix(8.0f, 0.0f, 0.0f, WorldMatrix);
-
+        // Rotation Moon
+        GetTranslationMatrix(
+            m_Moon.m_Translation[0], 
+            m_Moon.m_Translation[1], 
+            m_Moon.m_Translation[2], 
+            TranslationMatrix);
+        GetRotationYMatrix(m_Moon.m_Rotation[1], RotationMatrix);
+        MulMatrix(RotationMatrix, TranslationMatrix, WorldMatrix);
+        // Circulation Moon
+        GetRotationZMatrix(m_Moon.m_Rotation[2], RotationMatrix);
+        MulMatrix(WorldMatrix, RotationMatrix, WorldMatrix);
+        // Render Moon
         SetWorldMatrix(WorldMatrix);
+        DrawMesh(m_Moon.m_pMesh);
 
-        DrawMesh(m_pMoonMesh);
+        // Add Rotationspeed Earth
+        m_Earth.m_Rotation[1] += m_Earth.m_RotationDelta[1];
 
+        // Add Rotationspeed Moon
+        m_Moon.m_Rotation[1]  += m_Moon.m_RotationDelta[1];
+        m_Moon.m_Rotation[2]  += m_Moon.m_RotationDelta[2];
+        
         return true;
     }
 } // namespace
